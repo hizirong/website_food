@@ -1,7 +1,7 @@
 <?php 
             require_once("connMysql.php");										
             define("RECORDS_PER_PAGE",3);
-			$level=$_GET["level"];
+
 			$num_pages=1;
 			if(isset($_GET['page']))
 			{
@@ -9,10 +9,6 @@
 			}
 
 			$startRow_records=($num_pages-1)*RECORDS_PER_PAGE;	
-			
-			$query_RecBoard="SELECT * FROM resturant ";
-			$query_limit_RecBoard=$query_RecBoard." LIMIT {$startRow_records}, ".RECORDS_PER_PAGE;
-			$RecBoard=$db_link->query($query_limit_RecBoard);
 			
 			$query_RecBoard1="SELECT * FROM resturant WHERE categoryID ='1' ";
 			$query_limit_RecBoard1=$query_RecBoard1." LIMIT {$startRow_records}, ".RECORDS_PER_PAGE;
@@ -34,13 +30,9 @@
 			$query_limit_RecBoard5=$query_RecBoard5." LIMIT {$startRow_records}, ".RECORDS_PER_PAGE;
 			$RecBoard5=$db_link->query($query_limit_RecBoard5);
 			
-			$all_RecBoard=$db_link->query($query_RecBoard);
+			$all_RecBoard=$db_link->query($query_RecBoard1);
 			$total_records=$all_RecBoard->num_rows;
-			$total_pages=ceil($total_records/RECORDS_PER_PAGE);	
-			
-			$all_RecBoard1=$db_link->query($query_RecBoard1);
-			$total_records1=$all_RecBoard1->num_rows;
-			$total_pages1=ceil($total_records1/RECORDS_PER_PAGE);					
+			$total_pages=ceil($total_records/RECORDS_PER_PAGE);			
 ?>
 
 <!DOCTYPE html>
@@ -86,23 +78,25 @@ https://templatemo.com/tm-546-sixteen-clothing
 
     <!-- Header -->
     <header class="">
-       <nav class="navbar navbar-expand-lg">
+      <nav class="navbar navbar-expand-lg">
         <div class="container">
-          <a class="navbar-brand" href="index.php?level=<?php echo"$level";?>"><h2>SHU <em>eat</em></h2></a>
+          <a class="navbar-brand" href="index.php"><h2>SHU <em>EAT</em></h2></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" >首頁
+              <li class="nav-item">
+                <a class="nav-link" href="index.php">首頁
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 
+              <li class="nav-item active">
+                <a class="nav-link">所有店家</a>
+              </li>
               <li class="nav-item">
-                <a class="nav-link" href="list.php?level=<?php echo"$level";?>">訂餐</a>
-              </li>			  
-			  
+                <a class="nav-link" href="final.php">購物車</a>
+              			  
             </ul>
           </div>
         </div>
@@ -129,43 +123,25 @@ https://templatemo.com/tm-546-sixteen-clothing
         <div class="row">
           <div class="col-md-12">
             <div class="filters">
-			
-              <ul>	
-
-                  <li class="active" data-filter=".allres"><input type="button" value="All" style="border:none;background-color:white;" onclick="javascript:document.getElementById('all').style='display:block';javascript:document.getElementById('dev').style='display:none';"/></li>
-                  <li data-filter=".dev"><input type="button" value="日式" style="border:none;background-color:white;" onclick="javascript:document.getElementById('insert').style='display:block';javascript:document.getElementById('all').style='display:none';javascript:document.getElementById('dev').style='display:block';"/></li>
-                  <li data-filter=".des"><input type="button" value="韓式" style="border:none;background-color:white;" onclick="javascript:document.getElementById('insert').style='display:block';javascript:document.getElementById('all').style='display:none';javascript:document.getElementById('dev').style='display:block';"/></li>	  
-                  <li data-filter=".gra"><input type="button" value="中式" style="border:none;background-color:white;" onclick="javascript:document.getElementById('insert').style='display:block';javascript:document.getElementById('all').style='display:none';javascript:document.getElementById('dev').style='display:block';"/></li>
-				  <li data-filter=".ita"><input type="button" value="義式" style="border:none;background-color:white;" onclick="javascript:document.getElementById('insert').style='display:block';javascript:document.getElementById('all').style='display:none';javascript:document.getElementById('dev').style='display:block';"/></li>
-				  <li data-filter=".dri"><input type="button" value="飲料" style="border:none;background-color:white;" onclick="javascript:document.getElementById('insert').style='display:block';javascript:document.getElementById('all').style='display:none';javascript:document.getElementById('dev').style='display:block';"/></li>				               
-			  </ul>				  
+              <ul>			  
+                  <li class="active" data-filter="*">ALL</li>
+                  <li data-filter=".dev">日式</li>
+                  <li data-filter=".des">韓式</li>				  
+                  <li data-filter=".gra">中式</li>
+				  <li data-filter=".ita">義式</li>
+				  <li data-filter=".dri">飲料</li>				  
+              </ul>			  
             </div>
           </div>    
 		<div class="col-md-12">
 			<div class="filters-content">
-			<div class="row grid">		
-		<?php		
-		while ($row = mysqli_fetch_object($RecBoard)){?> 				
-				<div class="col-lg-4 col-md-4 all allres">
-				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
-					<div class="down-content">
-					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
-				<p>地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
-				<p>電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
-               
-					</div>
-				</div>
-				
-			 </div>	   			
-		<?php }?>
-		<div class="content-form" style="display:none" id="insert">	
-		<?php while($row = mysqli_fetch_object($RecBoard1)){?>					
+			<div class="row grid">								 
+		    <?php while($row = mysqli_fetch_object($RecBoard1)){?>					
 				<div class="col-lg-4 col-md-4 all dev">
 				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
 					<div class="down-content">
-					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
+					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
 				<p>地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
 				<p>電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
 				
@@ -173,14 +149,13 @@ https://templatemo.com/tm-546-sixteen-clothing
 					</div>
 				</div>
 				
-			 </div>	 
-					 
+			 </div>	   		   
 		    <?php }while ($row = mysqli_fetch_object($RecBoard2)){?> 				
 				<div class="col-lg-4 col-md-4 all des">
 				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
 					<div class="down-content">
-					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
+					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
 				<p>地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
 				<p>電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
                
@@ -191,9 +166,9 @@ https://templatemo.com/tm-546-sixteen-clothing
 		    <?php }while ($row = mysqli_fetch_object($RecBoard3)){?> 	
 				<div class="col-lg-4 col-md-4 all gra">
 				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
 					<div class="down-content">
-					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
+					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
 				<p>地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
 				<p>電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
 				
@@ -205,9 +180,9 @@ https://templatemo.com/tm-546-sixteen-clothing
 		    <?php }while ($row = mysqli_fetch_object($RecBoard4)){?> 	
 				<div class="col-lg-4 col-md-4 all ita">
 				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
 					<div class="down-content">
-					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
+					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
 				<p>地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
 				<p>電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
                
@@ -218,9 +193,9 @@ https://templatemo.com/tm-546-sixteen-clothing
 		    <?php }while ($row = mysqli_fetch_object($RecBoard5)){?> 	
 				<div class="col-lg-4 col-md-4 all dri">
 				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
 					<div class="down-content">
-					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
+					<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?><h4><?php echo "<value='$row->resturantName'>$row->resturantName";?></h4></a>
 				<p>地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
 				<p>電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
 				
@@ -231,27 +206,18 @@ https://templatemo.com/tm-546-sixteen-clothing
 			 </div>	   		   
 			<?php }?>			
 		</div>
-		</div>
 	</div>
 </div>			
           <div class="col-md-12">
             <ul class="pages">		
-			<div class="content-form" id="all">	
-              <li class="active" data-filter=".allres">			  
+              <li class="active" data-filter=".dev">
 			  <?php 					  
 						  for($i=1;$i<=$total_pages;$i++)
 						  {
-							  if($i!=$num_pages){echo"<li><a href='?page=".$i."'>".$i."</a></li>";}
-							  else{echo"<li><a>".$i."</a></li>";}
-							  
-						  }?></li></div>	
-			<div class="content-form" style="display:none" id="dev">	
-			<li class="active" data-filter=".dev">			  
-			  <?php 					  
-						  for($i=1;$i<=$total_pages1;$i++)
-						  {
-							  echo"<li><a>".$i."</a></li>";
-						  }$db_link->close();?> </li></div>						  						 
+							  echo"<li><a href='?page=".$i."'>".$i."</a></li>";
+						  }
+					$db_link->close();?></li>
+				
             </ul>
           </div>
         </div>

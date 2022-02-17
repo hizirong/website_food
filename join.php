@@ -138,10 +138,7 @@ https://templatemo.com/tm-546-sixteen-clothing
 	<script> 
 	  function checkData()
       {
-        var tStr = document.getElementById('email').value; 
-	    var tReg = new RegExp("[a-zA-Z0-9._%-]+@[a-zA-Z0-9._%-]+\.[a-zA-Z]{2,4}"); 
-		
-		if (document.myForm.account.value.length == 0)
+        if (document.myForm.account.value.length == 0)
         {
 		  document.myForm.account.focus();
           alert("請輸入帳號");
@@ -188,13 +185,7 @@ https://templatemo.com/tm-546-sixteen-clothing
 		  document.myForm.email.focus();
           alert("請輸入email");
           return false;
-        }
-		if (!tStr.match(tReg))
-        {
-		  document.myForm.email.focus();
-          alert("請輸入正確的email格式");
-          return false;
-        }			
+        }		
 		if (document.myForm.date.value.length == 0)
         {
 		  document.myForm.date.focus();
@@ -259,7 +250,6 @@ https://templatemo.com/tm-546-sixteen-clothing
 		  type="email"   
 		  placeholder="email"
 		  name="email"
-		  id="email"
 		  style ="border-radius: 12px; padding:3px 15px"
 		/>
 		<br><br>

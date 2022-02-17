@@ -1,24 +1,3 @@
-<?php
-session_start();	
-require_once("connMysql.php");	 
- //取得登入者帳號及名稱
-$inName = $_SESSION["inName"];	
-$inPhone = $_SESSION["inPhone"];
-$inAddress = $_SESSION["inAddress"];
-$inEmail = $_SESSION["inEmail"];
-//send email
-$to="$inEmail";
-//$from = "a107222028@live.shu.edu.tw";
-//$headers = "From: $from";
-$subject="=?utf-8?B?".base64_encode('SHU Eat 訂單明細')."?=";
-$message="test";
-
-$headers="MIME-Version:1.0\r\n";
-$headers.="Content-type:text/html;charset=utf-8\r\n";
-
-mail($to,$subject,$message,$headers);
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +9,7 @@ mail($to,$subject,$message,$headers);
     <meta name="author" content="">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
 
-    <title>購物車</title>
+    <title>訂單明細</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -89,18 +68,7 @@ https://templatemo.com/tm-546-sixteen-clothing
     </header>
 
     <!-- Page Content -->
-    <div class="page-heading products-heading header-text">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="text-content">
-              <h4>new arrivals</h4>
-              <h2>SHU EAT</h2>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
 	<br>
 	<div class="latest-products">
       <div class="container">
@@ -111,71 +79,80 @@ https://templatemo.com/tm-546-sixteen-clothing
 
 	<br>
 	<div class="col">
-            
-              <ul>
-                <li>名稱: <?php echo $inName;?></li>
-                <li>電話: <?php echo $inPhone;?></li>
-                <li>收貨地址: <?php echo $inAddress;?></li>
-                <li>Email: <?php echo $inEmail;?></li>
-              </ul><br>			  
-			  <table border="0" align="center" width="800">  
-	<tr bgcolor="#ACACFF" height="30" align="center">    
-
-		<td>商品</td>
-        <td>定價</td>
-        <td>數量</td>		
-        <td>小計</td>		
-      </tr>	
-	  <br>
-       <?php
-          //若購物車是空的，就顯示 "目前購物車內沒有任何產品及數量" 訊息
-          if (empty($_COOKIE["book_no_list"]))
-          {
-            echo "<tr align='center'>";
-            echo "<td colspan='6'>目前購物車內沒有任何產品及數量！</td>";	
-            echo "</tr>";
-          }
-          else
-          {
-            //取得購物車資料
-            $book_no_array = explode(",", $_COOKIE["book_no_list"]);
-            $book_name_array = explode(",", $_COOKIE["book_name_list"]);
-            $price_array = explode(",", $_COOKIE["price_list"]);		
-            $quantity_array = explode(",", $_COOKIE["quantity_list"]);		
+            <table border="1" bgcolor="white" rules="cols" align="center" cellpadding="5">
+    <tr height="25">
+				<td colspan="4" align="Center" bgcolor="#CCCC00">個人資料</td>
+    </tr>
+    <tr height="25">
+      <td colspan="4">姓名：<u><?php //echo $_COOKIE["name"] ?>
+        <?php //for ($i = 0; $i <= 100 - 2* strlen($_COOKIE["name"]); $i++) echo "&nbsp;"; ?></u>
+      </td>
+    </tr>
+    <tr height="25">
+      <td colspan="4">電話：
+        <u><?php for ($i = 0; $i <= 100; $i++) echo "&nbsp;"; ?></u>
+      </td>
+    </tr>
+    <tr height="25">
+      <td colspan="4">地址：
+        <u><?php for ($i = 0; $i <= 100; $i++) echo "&nbsp;"; ?></u>
+      </td>
+    </tr>
+    <tr height="25">
+      <td colspan="4">
+        配送方式：自取
+      </td>
+    </tr>
+    <tr height="25">
+      <td colspan="4">
+        付款方式：現金
+      </td>
+    </tr>
+    
+    <tr height="25">
+      <td colspan="4">
+        支付總金額：<u><?php for ($i = 0; $i <= 89; $i++) echo "&nbsp;"; ?></u>
+      </td>
+    </tr>   
+    <tr height="25">
+      <td colspan="4" align="center" bgcolor="#CCCC00">訂單細目</td>
+    </tr>
+    <tr height="25" align="center" bgcolor="FFFF99">
+      <td>餐點</td>
+      <td>價錢</td>
+      <td>數量</td>
+      <td>小計</td>																
+    </tr>			
+      <?php
+        //取得購物車資料
+        $book_name_array = explode(",", $_COOKIE["book_name_list"]);
+        $price_array = explode(",", $_COOKIE["price_list"]);		
+        $quantity_array = explode(",", $_COOKIE["quantity_list"]);		
 					
-            //顯示購物車內容
-            $total = 0;			
-            for ($i = 0; $i < count($book_no_array); $i++)
-            {
-              //計算小計
-              $sub_total = $price_array[$i] * $quantity_array[$i];
-						
-              //計算總計
-              $total += $sub_total;
-						
-              //顯示各欄位資料
-              //echo "<form method='post' action='change.php?book_no=" . 
-                $book_no_array[$i] . "'>";						
-              echo "<tr bgcolor='#EDEAB1'>";
-              echo "<td align='center'>" . $book_name_array[$i] . "</td>";			
-              echo "<td align='center'>$" . $price_array[$i] . "</td>";
-              echo "<td align='center'>" . $quantity_array[$i] . "</td>";			
-              echo "<td align='center'>$" . $sub_total . "</td>";					
-              echo "</tr>";
-              //echo "</form>";						
-            }
+        //顯示購物車內容
+        $total = 0;		
+        for ($i = 0; $i < count($book_name_array); $i++)
+        {
+          //計算小計
+          $sub_total = $price_array[$i] * $quantity_array[$i];
 					
-            echo "<tr align='right' bgcolor='#EDEAB1'>";
-            echo "<td colspan='6' align='left'>總金額 = " . $total . "</td>";	
-            echo "</tr>";	
-            echo "<tr align='center'>";
-            echo "<td colspan='6'>" . "<br><input type='button' value='確認送出'
-              onClick=\"javascript:window.open('final.php','_self')\">";
-            echo "</td>";	
-            echo "</tr>";	
-          }
+          //計算總計
+          $total += $sub_total;
+					
+          //顯示各欄位資料
+          echo "<tr>";	
+          echo "<td align='center'>" . $book_name_array[$i] . "</td>";			
+          echo "<td align='center'>$" . $price_array[$i] . "</td>";
+          echo "<td align='center'>" . $quantity_array[$i] . "</td>";
+          echo "<td align='center'>$" . $sub_total . "</td>";
+          echo "</tr>";
+        }
+        echo "<tr align='right' bgcolor='#CCCC00'>";
+        echo "<td colspan='4'>總金額 = " . $total . "</td>";	
+        echo "</tr>";	
       ?>
-	  </table>
+    </table>
+     
 	</div>
 	</div>
 	</div>

@@ -8,7 +8,7 @@
  $inAccount = $_SESSION["inAccount"];				
  }
  else{ header("location:account.php");}
-
+ 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,6 +41,7 @@ https://templatemo.com/tm-546-sixteen-clothing
   </head>
 
   <body>
+
     <!-- ***** Preloader Start ***** -->
     <div id="preloader">
         <div class="jumper">
@@ -54,35 +55,31 @@ https://templatemo.com/tm-546-sixteen-clothing
     <header class="">
       <nav class="navbar navbar-expand-lg">
         <div class="container">
-          <a class="navbar-brand" href="index.php?level=<?php echo"$level";?>"><h2>SHU <em>eat</em></h2></a>
+          <a class="navbar-brand" href="index.php"><h2>SHU <em>EAT</em></h2></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" >首頁
+              <li class="nav-item">
+                <a class="nav-link" href="index.php?level=<?php echo"$level";?>">首頁
                   <span class="sr-only">(current)</span>
                 </a>
               </li> 
+              <li class="nav-item active">
+                <a class="nav-link" >購物資訊</a>
+              </li>
+			  <li class="nav-item">
+                <a class="nav-link" href="list.php">所有店家</a>
+              </li>
               <li class="nav-item">
-                <a class="nav-link" href="list.php?level=<?php echo"$level";?>">訂餐</a>
-              </li>			  
-			  <?php			  
-			  	  
-			  if(!isset($_SESSION['inAccount'])){
-              echo"<li class='nav-item'> <a class='nav-link' href='account.php'>登入</a></li>";			  
-			  }
-			  if(isset($_SESSION['inAccount'])){
-				  $level=$_GET["level"];
-              echo"<li class='nav-item'> <a class='nav-link' href='logout.php'>登出</a></li>";}			  
-			  ?>
+                <a class="nav-link" href="final.php">購物車</a>
+              			  
             </ul>
           </div>
         </div>
       </nav>
     </header>
-
     <!-- Page Content -->
     <div class="page-heading products-heading header-text">
       <div class="container">
@@ -126,16 +123,20 @@ https://templatemo.com/tm-546-sixteen-clothing
         }
         
     }
+	
+	
 </script>
  <div class="col-md-7">
+
 	<div class="down-content">
 		<?php	
           require_once("connMysql.php");
 		  $id = $_GET["resturantID"]; 
 		  $name = $_GET["resturantName"];	
-			if($_GET["level"]==1){		  
-			echo"<h4><a href='add.php?resturantID=$id&resturantName=$name&level=$level'>新增</a></h4>";	
-			} 		  
+		if($_GET["level"]==1){		  
+		echo"<h4><a href='add.php?resturantID=$id&resturantName=$name&level=$level'>新增</a></h4>";	
+		}  
+//echo"<input type='button' value='新增' class='filled-button' onClick='test()'/>";
           //篩選出所有產品資料
           $sql = "SELECT * FROM food WHERE resturantID=$id ";
           $result = $db_link->query($sql);
@@ -143,7 +144,7 @@ https://templatemo.com/tm-546-sixteen-clothing
 						
           //計算總記錄數
           $total_records = mysqli_num_rows($result);
-		for ($i = 0; $i < $total_records; $i++)
+			for ($i = 0; $i < $total_records; $i++)
           {		  	
 			$row = mysqli_fetch_assoc($result);
 			echo "<form method='post' action='add_to_car.php?book_no=" . 
@@ -153,17 +154,17 @@ https://templatemo.com/tm-546-sixteen-clothing
 			echo "<h3><td>" . $row["foodName"] . "</td></h3><br>";
 			echo "<h4><td>$" . $row["foodPrice"] . "</td></h4><br>";
 			echo"<td><input type='button' onclick='sub()' value='-' ></td>";					
-			echo"<td><input type='text' value='1'  class='xpf' name='quantity' id='quantity' size='1' ></td>";				
+			echo"<td><input type='text' value='1'  class='xpf' name='quantity' size='1' ></td>";				
 			echo"<td><input type='button' onclick='add()' value='+' ></td>";
             echo "<td><input type='submit' value='放入購物車'></td>";
 			if($_GET["level"]==1){		  
 			echo"<h4><a href='editMenu.php?resturantID=$id&resturantName=$name&level=$level&foodID=". $row["foodID"] . "'>修改</a></h4>";	
 			echo"<h4><a href='delMenu.php?resturantID=$id&resturantName=$name&level=$level&foodID=". $row["foodID"] . "'>刪除</a></h4>";
 			}  
-			echo"<hr>";
             echo "</tr>";
 			echo "</form>";}?>						  					  
-    </div>							
+    </div>	
+
 </div>		 		  
           <div class="col-md-5">
             <div class="left-content">			
@@ -176,7 +177,7 @@ https://templatemo.com/tm-546-sixteen-clothing
 			  電話:<?php echo "$row->resturantPhone";}?><br>		
 			                       
     <table border="0" align="center" width="500">  
-	<tr bgcolor=" #fd9883" height="30" align="center">    
+	<tr bgcolor="#ACACFF" height="30" align="center">    
 
 		<td>商品</td>
         <td>價錢</td>
@@ -216,30 +217,32 @@ https://templatemo.com/tm-546-sixteen-clothing
               //顯示各欄位資料
               echo "<form method='post' action='change.php?book_no=" . 
                 $book_name_array[$i] . "'>";						
-              echo "<tr bgcolor='#ffeca8'>";		
+              echo "<tr bgcolor='#EDEAB1'>";		
               echo "<td align='center'>" . $book_name_array[$i] . "</td>";			
               echo "<td align='center'>$" . $price_array[$i] . "</td>";
               echo "<td align='center'><input type='text' name='quantity' value='" . 
                 $quantity_array[$i] . "' size='5'></td>";			
               echo "<td align='center'>$" . $sub_total . "</td>";
-              echo "<td align='center'><input type='submit'  value='修改'></td>";		  
+              echo "<td align='center'><input type='submit' value='修改'></td>";		  
               echo "</tr>";
               echo "</form>";						
             }
 					
-            echo "<tr align='right' bgcolor='#ffeca8'>";
+            echo "<tr align='right' bgcolor='#EDEAB1'>";
             echo "<td colspan='6'>總金額 = " . $total . "</td>";	
             echo "</tr>";	
             echo "<tr align='center'>";
             echo "<td colspan='6'>" . "<br><input type='button' value='退回所有產品'
               onClick=\"javascript:window.open('delete_order.php','_self')\">";
-			 echo"<h3><a href='final.php?level=$level'>確定</a></h3>";
+			 echo "<td colspan='6'>" . "<br><input type='button' value='確定'
+              onClick=\"javascript:window.open('final.php')\">";
             echo "</td>";	
             echo "</tr>";	
           }
       ?>
 	  </table>
-	  
+	  <br>
+
           </div>
 		  </div>
         </div>
@@ -280,7 +283,17 @@ https://templatemo.com/tm-546-sixteen-clothing
           t.style.color='#fff';
           }
       }
+	  function test()
+	  {
+		  var id=<?php echo $id; ?>;
+		   var name=<?php echo $name; ?>;
+		  
+		  //var name=<?php echo $name;?>;		  	  
+		  window.location.href="add.php?resturantID="+id+"&resturantName="+name;
+	  }
+	  
     </script>
+	
   </body>
 
 </html>

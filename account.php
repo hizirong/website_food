@@ -5,7 +5,7 @@ session_start();
 		require_once("connMysql.php");
 		$inAccount=$_POST["account"];
 		$inPassword=$_POST["password"];		
-		$sql_query="SELECT *FROM users Where account = '$inAccount'
+		$sql_query="SELECT*FROM users Where account = '$inAccount'
             AND password = '$inPassword'";
 		$result=$db_link->query($sql_query);
 		$db_link->close();
@@ -23,17 +23,13 @@ session_start();
 		{
 			//將使用者資料加入 Session
 			session_start();
-			$row = mysqli_fetch_object($result);	
+			$row = mysqli_fetch_object($result);
 			$_SESSION["inAccount"] = $row->account;	
-			$_SESSION["inPassword"] = $row->password;
 			$_SESSION["inName"] = $row->name;
 			$_SESSION["inPhone"] = $row->phone;
 			$_SESSION["inAddress"] = $row->address;
-			$_SESSION["inEmail"] = $row->email;
-			$_SESSION["inSex"] = $row->sex;
-			$_SESSION["inDate"] = $row->date;
-			$userid=$row->id;
-			$level=$row->level;	
+			$_SESSION["inEmail"] = $row->email;	
+			$level=$row->level;			
 		   			
 			mysqli_free_result($result);
 			echo "<script type='text/javascript'>";

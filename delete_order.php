@@ -1,6 +1,4 @@
 <?php
-
-
   //清除購物車資料
   setcookie("book_no_list", "");
   setcookie("book_name_list", "");

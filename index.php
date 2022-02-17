@@ -1,10 +1,3 @@
-<?php
-session_start();		
-$level="";
-if(isset($_SESSION['inAccount'])){
-$level=$_GET["level"];
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,13 +67,17 @@ https://templatemo.com/tm-546-sixteen-clothing
                 <a class="nav-link" href="list.php?level=<?php echo"$level";?>">訂餐</a>
               </li>			  
 			  <?php			  
-			  	  
+			  session_start();
+			  $level="";
 			  if(!isset($_SESSION['inAccount'])){
               echo"<li class='nav-item'> <a class='nav-link' href='account.php'>登入</a></li>";			  
 			  }
 			  if(isset($_SESSION['inAccount'])){
 				  $level=$_GET["level"];
-              echo"<li class='nav-item'> <a class='nav-link' href='logout.php'>登出</a></li>";}			  
+              echo"<li class='nav-item'> <a class='nav-link' href='logout.php'>登出</a></li>";
+			  if($level==1)
+			  echo"<li class='nav-item'> <a class='nav-link' href='logout.php'>會員管理</a></li>";
+			  }
 			  ?>
             </ul>
           </div>
@@ -120,19 +117,19 @@ https://templatemo.com/tm-546-sixteen-clothing
           <div class="col-md-12">
             <div class="section-heading">
               <h2>新店家</h2>
-              <a href="list.php?level=<?php echo"$level";?>">查看所有店家<i class="fa fa-angle-right"></i></a>
+              <a href="list.php">查看所有店家<i class="fa fa-angle-right"></i></a>
             </div>
           </div>
 		  
 		 			
 		  <?php 
             require_once("connMysql.php");	
-		   
+			
 			//取得登入者帳號及名稱
 			//session_start();
 			if (isset($_SESSION["inAccount"]))
 			{
-				$inAccount = $_SESSION["inAccount"];				
+				$inAccount = $_SESSION["inAccount"];						
 			}
 	  	  				
             $sql = "SELECT * FROM resturant Limit 3";
@@ -144,11 +141,9 @@ https://templatemo.com/tm-546-sixteen-clothing
 				?>
 			<div class="col-md-4">
 				<div class="product-item">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?>
-				<img src="assets/images/food/<?php echo "$row->resturantPhoto";?>" alt=<?php echo "$row->resturantPhoto";?> width="20px"></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?><img src="assets/images/food/<?php echo "$row->resturantPhoto"; ?>" alt=<?php echo "$row->resturantPhoto";?>></a>
 				<div class="down-content">
-				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName&level=$level'>";?> <h4> 
-				<?php echo"<value='$row->resturantName'>$row->resturantName"; ?></h4></a>
+				<?php echo"<a href='store.php?resturantID=$row->resturantID&resturantName=$row->resturantName'>";?> <h4> <?php echo"<value='$row->resturantName'>$row->resturantName"; ?></h4></a>
 				<p name="resturantAddress">地址：<?php echo "<value='$row->resturantAddress'>$row->resturantAddress";?></p>
 				<p name="resturantPhone">電話：<?php echo "<value='$row->resturantPhone'>$row->resturantPhone";?></p>
                 
